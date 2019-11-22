@@ -45,6 +45,7 @@ func (s *Suite) Init(dns string, models []interface{}, seedFileName string, verb
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect database: %v", err))
 	}
+	s.Verbose = verbose
 	if s.Verbose {
 		s.Db.LogMode(true)
 	}
