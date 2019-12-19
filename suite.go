@@ -18,13 +18,14 @@ import (
 type Suite struct {
 	suite.Suite
 
-	Dns          string
-	Db           *gorm.DB
-	Models       []interface{} // 初始化GORM模型 *指针*
-	Cleaner      dbcleaner.DbCleaner
-	SeedFileName string
-	Polluter     *polluter.Polluter
-	Verbose      bool // 是否输出SQL语句
+	Dns             string
+	Db              *gorm.DB
+	GormSingleModel bool
+	Models          []interface{} // 初始化GORM模型 *指针*
+	Cleaner         dbcleaner.DbCleaner
+	SeedFileName    string
+	Polluter        *polluter.Polluter
+	Verbose         bool // 是否输出SQL语句
 
 	modelTableNames []string // 模型表名
 	txDbDriverName  string
@@ -48,6 +49,10 @@ func (s *Suite) Init(dns string, models []interface{}, seedFileName string, verb
 	s.Verbose = verbose
 	if s.Verbose {
 		s.Db.LogMode(true)
+	}
+
+	if s.GormSingleModel {
+		s.Db.SingularTable(true)
 	}
 
 	// init txdb
